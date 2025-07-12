@@ -2,7 +2,11 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from borrowing.models import Borrowing
-from borrowing.serializers import BorrowingListSerializer, BorrowingSerializer, BorrowingDetailSerializer
+from borrowing.serializers import (
+    BorrowingListSerializer,
+    BorrowingCreateSerializer,
+    BorrowingDetailSerializer,
+)
 
 
 class ListBorrowingsView(generics.ListAPIView):
@@ -10,12 +14,14 @@ class ListBorrowingsView(generics.ListAPIView):
     serializer_class = BorrowingListSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).select_related("book", "user")
+        return self.queryset.filter(user=self.request.user).select_related(
+            "book", "user"
+        )
 
 
 class CreateBorrowingsView(generics.CreateAPIView):
     queryset = Borrowing.objects.all()
-    serializer_class = BorrowingSerializer
+    serializer_class = BorrowingCreateSerializer
     permission_classes = (IsAuthenticated,)
 
 
