@@ -23,6 +23,7 @@ from library_service import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/book/", include("book.urls")),
+    path("api/user/", include("user.urls")),
 ]
 
 if settings.DEBUG:
