@@ -12,10 +12,6 @@ class Borrowing(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return (
-            f"{self.book.title}, {self.expected_return_date}, {self.actual_return_date}"
-        )
 
     def clean(self):
         if self.borrow_date > self.expected_return_date:
@@ -29,3 +25,8 @@ class Borrowing(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return (
+            f"{self.book.title}, {self.expected_return_date}, {self.actual_return_date}"
+        )

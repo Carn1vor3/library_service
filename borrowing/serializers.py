@@ -31,8 +31,8 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             book.inventory -= 1
             book.save()
+            borrowing = Borrowing.objects.create(user=user, **validated_data)
 
-        borrowing = Borrowing.objects.create(user=user, **validated_data)
         return borrowing
 
 
@@ -49,6 +49,22 @@ class BorrowingListSerializer(serializers.ModelSerializer):
             "book",
         )
         read_only_fields = ("id", "actual_return_date")
+
+
+class BorrowingListAdminSerializer(serializers.ModelSerializer):
+    book = serializers.SlugRelatedField(read_only=True, slug_field="title")
+
+    class Meta:
+        model = Borrowing
+        fields = (
+            "id",
+            "borrow_date",
+            "expected_return_date",
+            "actual_return_date",
+            "book",
+            "user_id",
+        )
+        read_only_fields = ("id", "actual_return_date", "user")
 
 
 class BorrowingDetailSerializer(serializers.ModelSerializer):
