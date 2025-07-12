@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "book",
     "debug_toolbar",
     "rest_framework",
+    "borrowing",
 ]
 
 MIDDLEWARE = [
