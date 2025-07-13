@@ -80,3 +80,14 @@ class BorrowingDetailSerializer(serializers.ModelSerializer):
             "book",
         )
         read_only_fields = ("id", "actual_return_date")
+
+
+class BorrowingReturnSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Borrowing
+        fields = []
+
+    def validate(self, attrs):
+        if self.instance.actual_return_date is not None:
+            raise serializers.ValidationError("You can't return a book twice.")
+        return attrs
