@@ -1,4 +1,5 @@
 from django.utils import timezone  # Правильний timezone для Django
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -77,3 +78,21 @@ class BorrowingViewSet(viewsets.ModelViewSet):
             {"status": "Book returned successfully"},
             status=status.HTTP_200_OK
         )
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "user_id",
+                type=int,
+                description="The ID of the user who borrowed",
+            ),
+            OpenApiParameter(
+                "is_active",
+                type=bool,
+                description="Whether the borrowing is active",
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        """List of all borrowings"""
+        return super().list(request, *args, **kwargs)
