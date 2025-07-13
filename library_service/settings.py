@@ -33,8 +33,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -47,7 +45,9 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "rest_framework",
     "borrowing",
-    "drf_spectacular"
+    "drf_spectacular",
+    "django_celery_results",
+    "payment"
 ]
 
 MIDDLEWARE = [
@@ -160,3 +160,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "django-db"
+
