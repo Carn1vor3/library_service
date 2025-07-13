@@ -1,8 +1,8 @@
-from django.utils import timezone  # Правильний timezone для Django
+from django.db import transaction
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from borrowing.models import Borrowing
@@ -14,6 +14,7 @@ from borrowing.serializers import (
     BorrowingListAdminSerializer,
     BorrowingReturnSerializer,
 )
+from telegram_helper import send_telegram_message
 
 
 class BorrowingViewSet(viewsets.ModelViewSet):
@@ -68,16 +69,24 @@ class BorrowingViewSet(viewsets.ModelViewSet):
                 {"detail": "This borrowing has already been returned."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        with transaction.atomic():
+            borrowing.actual_return_date = timezone.now()
+            borrowing.book.inventory += 1
+            borrowing.book.save()
+            borrowing.save()
+            text = (
+                f"<b>Book {borrowing.book.title} returned!</b>\n"
+                f"User: {borrowing.user.email}\n"
+                f"Borrowing date: {borrowing.borrow_date}\n"
+                f"Expected return date: {borrowing.expected_return_date}\n"
+                f"Return date: {borrowing.actual_return_date}\n"
+            )
+            send_telegram_message(text)
+            return Response(
+                {"status": "Book returned successfully"},
+                status=status.HTTP_200_OK
+            )
 
-        borrowing.actual_return_date = timezone.now()
-        borrowing.book.inventory += 1
-        borrowing.book.save()
-        borrowing.save()
-
-        return Response(
-            {"status": "Book returned successfully"},
-            status=status.HTTP_200_OK
-        )
 
     @extend_schema(
         parameters=[
@@ -96,3 +105,14 @@ class BorrowingViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """List of all borrowings"""
         return super().list(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        borrowing = serializer.save()
+        text = (
+            f"<b>New borrowing created!</b>\n"
+            f"User: {borrowing.user.email}\n"
+            f"Book: {borrowing.book.title}\n"
+            f"Borrowing date: {borrowing.borrow_date}\n"
+            f"Expected return date: {borrowing.expected_return_date}\n"
+        )
+        send_telegram_message(text)
