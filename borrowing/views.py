@@ -60,6 +60,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         methods=["post"],
         permission_classes=(BorrowingPermissions,),
         url_path="return",
+        url_name="return"
     )
     def return_borrowing(self, request, *args, **kwargs):
         borrowing = self.get_object()
