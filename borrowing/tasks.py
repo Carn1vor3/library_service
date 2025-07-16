@@ -13,8 +13,8 @@ def send_overdue_notification():
 
     if overdue_borrowings.exists():
         message = "⚠️ Book debtors:\n"
-        for b in overdue_borrowings:
-            message += f"- {b.book.title} user {b.user.email}\n"
+        for books in overdue_borrowings:
+            message += f"- {books.book.title} user {books.user.email}\n"
     else:
         message = "✅ NO debts."
 
