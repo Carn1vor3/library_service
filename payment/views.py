@@ -104,6 +104,7 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
+
 def index(request):
     borrowing = Borrowing.objects.first()
     return render(request, "index.html", {"borrowing": borrowing})
