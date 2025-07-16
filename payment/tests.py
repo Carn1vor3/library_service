@@ -8,10 +8,15 @@ from payment.models import Payment
 
 User = get_user_model()
 
+
 class PaymentViewSetTests(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email="user@example.com", password="pass123")
-        self.staff = User.objects.create_user(email="staff@example.com", password="pass123", is_staff=True)
+        self.user = User.objects.create_user(
+            email="user@example.com", password="pass123"
+        )
+        self.staff = User.objects.create_user(
+            email="staff@example.com", password="pass123", is_staff=True
+        )
 
         self.book = Book.objects.create(
             title="Book for payment",

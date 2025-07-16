@@ -8,7 +8,6 @@ class Payment(models.Model):
         PENDING = "PENDING", "PENDING"
         PAID = "PAID", "PAID"
 
-
     class Type(models.TextChoices):
         PAYMENT = "PAYMENT", "PAYMENT"
         FINE = "FINE", "FINE"

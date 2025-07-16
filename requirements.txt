@@ -13,6 +13,7 @@ click-didyoumean==0.3.1
 click-plugins==1.1.1.2
 click-repl==0.3.0
 colorama==0.4.6
+coverage==7.9.2
 Django==5.1.11
 django-cors-headers==4.7.0
 django-debug-toolbar==4.4.6
@@ -52,6 +53,7 @@ rpds-py==0.26.0
 setuptools==80.9.0
 six==1.17.0
 sqlparse==0.5.3
+stripe==12.3.0
 types-python-dateutil==2.9.0.20250708
 typing_extensions==4.14.1
 tzdata==2025.2

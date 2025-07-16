@@ -9,10 +9,15 @@ from datetime import timedelta
 
 User = get_user_model()
 
+
 class BorrowingViewSetTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email="user@example.com", password="testpass")
-        self.staff = User.objects.create_user(email="staff@example.com", password="staffpass", is_staff=True)
+        self.user = User.objects.create_user(
+            email="user@example.com", password="testpass"
+        )
+        self.staff = User.objects.create_user(
+            email="staff@example.com", password="staffpass", is_staff=True
+        )
 
         self.book = Book.objects.create(
             title="Test Book",
@@ -28,7 +33,7 @@ class BorrowingViewSetTest(APITestCase):
             book=self.book,
             borrow_date=timezone.now().date(),
             expected_return_date=timezone.now().date() + timedelta(days=7),
-            actual_return_date=None
+            actual_return_date=None,
         )
 
     def test_list_borrowings_user_sees_only_their(self):
@@ -40,7 +45,9 @@ class BorrowingViewSetTest(APITestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_list_borrowings_staff_sees_all(self):
-        other_user = User.objects.create_user(email="other@example.com", password="testpass")
+        other_user = User.objects.create_user(
+            email="other@example.com", password="testpass"
+        )
         Borrowing.objects.create(
             user=other_user,
             book=self.book,

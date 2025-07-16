@@ -2,13 +2,11 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 
+
 class UserRegistrationTests(APITestCase):
     def test_register_user_success(self):
-        url = reverse('user:register')
-        data = {
-            "email": "newuser@example.com",
-            "password": "strongpassword123"
-        }
+        url = reverse("user:register")
+        data = {"email": "newuser@example.com", "password": "strongpassword123"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("id", response.data)
@@ -18,12 +16,12 @@ class UserRegistrationTests(APITestCase):
 
 class UserAuthTests(APITestCase):
     def setUp(self):
-        self.register_url = reverse('user:register')
-        self.token_url = reverse('user:token_obtain_pair')
-        self.me_url = reverse('user:manage')
+        self.register_url = reverse("user:register")
+        self.token_url = reverse("user:token_obtain_pair")
+        self.me_url = reverse("user:manage")
         self.user_data = {
             "email": "testuser@example.com",
-            "password": "strongpassword123"
+            "password": "strongpassword123",
         }
         self.client.post(self.register_url, self.user_data)
 

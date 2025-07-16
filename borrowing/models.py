@@ -12,7 +12,6 @@ class Borrowing(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-
     def clean(self):
         if self.borrow_date > self.expected_return_date:
             raise ValidationError("Borrowing date must be before expected return date")

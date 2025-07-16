@@ -4,11 +4,11 @@ from borrowing.models import Borrowing
 import requests
 import os
 
+
 @shared_task
 def send_overdue_notification():
     overdue_borrowings = Borrowing.objects.filter(
-        expected_return_date__lt=now(),
-        actual_return_date__isnull=True
+        expected_return_date__lt=now(), actual_return_date__isnull=True
     )
 
     if overdue_borrowings.exists():

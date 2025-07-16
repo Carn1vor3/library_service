@@ -46,7 +46,11 @@ class BorrowingViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == "list":
-            return BorrowingListAdminSerializer if self.request.user.is_staff else BorrowingListSerializer
+            return (
+                BorrowingListAdminSerializer
+                if self.request.user.is_staff
+                else BorrowingListSerializer
+            )
         if self.action == "retrieve":
             return BorrowingDetailSerializer
         if self.action == "create":
@@ -60,7 +64,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         methods=["post"],
         permission_classes=(BorrowingPermissions,),
         url_path="return",
-        url_name="return"
+        url_name="return",
     )
     def return_borrowing(self, request, *args, **kwargs):
         borrowing = self.get_object()
@@ -68,7 +72,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
         if borrowing.actual_return_date:
             return Response(
                 {"detail": "This borrowing has already been returned."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
         with transaction.atomic():
             borrowing.actual_return_date = timezone.now()
@@ -84,10 +88,8 @@ class BorrowingViewSet(viewsets.ModelViewSet):
             )
             send_telegram_message(text)
             return Response(
-                {"status": "Book returned successfully"},
-                status=status.HTTP_200_OK
+                {"status": "Book returned successfully"}, status=status.HTTP_200_OK
             )
-
 
     @extend_schema(
         parameters=[
@@ -100,7 +102,7 @@ class BorrowingViewSet(viewsets.ModelViewSet):
                 "is_active",
                 type=bool,
                 description="Whether the borrowing is active",
-            )
+            ),
         ]
     )
     def list(self, request, *args, **kwargs):
