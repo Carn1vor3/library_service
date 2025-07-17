@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stripe Payment</title>
+</head>
+<body>
+    <h1>Payment fo borrowing №{{ borrowing.id }}</h1>
+
+    <form action="{% url 'payment:create-checkout-session' %}" method="post">
+
+        {% csrf_token %}
+        <input type="hidden" name="borrowing_id" value="{{ borrowing.id }}">
+        <button type="submit">Pay</button>
+    </form>
+</body>
+</html>
